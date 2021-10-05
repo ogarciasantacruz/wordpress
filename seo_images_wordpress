@@ -1,0 +1,38 @@
+/* SEO IMAGES */
+/*
+ * Add attributes ALT and Title in image WooCommerce
+ * File: functions.php
+ * 
+ */
+add_filter('wp_get_attachment_image_attributes', 'change_attachement_image_attributes', 20, 2);
+
+function change_attachement_image_attributes( $attr, $attachment ){
+    // Get post parent
+    $parent = get_post_field( 'post_parent', $attachment);
+
+    // Get post type to check if it's product
+    $type = get_post_field( 'post_type', $parent);
+    if( $type != 'product' ){
+        return $attr;
+    }
+
+    /// Get title
+    $title = get_post_field( 'post_title', $parent);
+	  $id = get_post_field( 'ID', $parent);
+	  // Get product
+	  $product = wc_get_product( $id );
+	  $brand = "";
+	
+	if (isset($product->sku) ) {
+  
+      // Get attributes
+		  $attributes = $product->get_attributes();
+		  
+	    $attr['alt'] = $product->sku." - ". str_replace('"', '' ,$product->name);
+    	$attr['title'] = $product->sku." - ". str_replace('"', '', $product->name);	
+	}
+
+    return $attr;
+}
+
+/* END SEO IMAGES */
