@@ -1,0 +1,2 @@
+# wordpress
+Functions for wordpress
